@@ -8,6 +8,17 @@ async function bootstrap() {
   // Enable CORS so the React frontend can communicate with the backend
   app.enableCors();
 
+  // Log every incoming HTTP request (visible in local terminal & Render logs)
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      console.log(
+        `[${req.method}] ${req.originalUrl || req.url} - ${res.statusCode} (${Date.now() - start}ms)`
+      );
+    });
+    next();
+  });
+
   // Validate all incoming request payloads
   app.useGlobalPipes(
     new ValidationPipe({

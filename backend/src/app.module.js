@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobEntity } from './jobs/job.entity';
 import { JobsModule } from './jobs/jobs.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -13,5 +14,6 @@ import { JobsModule } from './jobs/jobs.module';
     }),
     JobsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

@@ -1,0 +1,22 @@
+import { Controller, Get } from '@nestjs/common';
+
+@Controller()
+export class AppController {
+  @Get('health')
+  getHealth() {
+    return {
+      status: 'ok',
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  @Get('api/health')
+  getApiHealth() {
+    return {
+      status: 'ok',
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+    };
+  }
+}
