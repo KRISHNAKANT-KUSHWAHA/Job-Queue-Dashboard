@@ -2,7 +2,7 @@
 
 A simple, practical, and clean background job management dashboard built with a **JavaScript-only** stack: **React (Vite)** on the frontend and **NestJS (TypeORM + SQLite)** on the backend.
 
-Built as an intern/junior engineering assignment focusing on solid fundamentals: straightforward state management, strict business rules, request validation, real-world concurrency handling (race conditions), and readable code that can be explained line-by-line.
+Built an assignment focusing on solid fundamentals: straightforward state management, strict business rules, request validation, real-world concurrency handling (race conditions), and readable code that can be explained line-by-line.
 
 ---
 
