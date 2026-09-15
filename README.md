@@ -273,9 +273,24 @@ If not handled carefully, both requests might pass read-checks and perform redun
 
 ---
 
+## Challenges Faced (Post-Deployment)
+
+Deploying a decoupled full-stack application (Frontend on Vercel and Backend on Render) presented a few practical post-deployment challenges:
+
+### 1. Client-Side Environment Variables & Cross-Origin Cloud Connection
+- **The Challenge**: When deploying the frontend to Vercel and the backend to Render, Vite requires all client-accessible environment variables to be explicitly prefixed with `VITE_` (e.g., `VITE_API_URL`) and bakes them into the static bundle at build time. If named without the prefix (like `API_URL`) or updated without triggering a fresh deployment, Vite strips the variable, causing the production frontend to fall back to `http://localhost:3000` and throw connection errors.
+- **The Solution**: Designed a smart fallback resolver in `jobApi.js` that inspects `import.meta.env.VITE_API_URL` and `import.meta.env.API_URL`, checks whether the app is executing on `localhost` versus cloud hosting (`window.location.hostname`), and automatically routes to the live Render backend (`https://job-queue-dashboard-vtov.onrender.com`) on production. This ensures the live Vercel deployment works seamlessly out of the box.
+
+### 2. Cloud Observability & Live Request Logging
+- **The Challenge**: By default, NestJS only outputs server startup logs (`Mapped route`, `Nest application started`). Once deployed on Render, individual incoming HTTP requests triggered from the Vercel frontend (such as `GET /jobs`, `POST /jobs`, and `PATCH /jobs/:id/status`) were not visible in Render's live logs, making it difficult to trace incoming traffic.
+- **The Solution**: Implemented a custom HTTP request logging middleware in `main.js` that prints `[METHOD] /url - statusCode (duration ms)` for every incoming request directly to the stdout stream. Additionally, added dedicated `/health` and `/api/health` monitoring endpoints to inspect server uptime and health at any time.
+
+---
+
 ## Future Improvements
 
 1. **Automatic Retry with Backoff**: Allow failed jobs to be retried up to 3 times before entering a permanent `dead-letter` status.
 2. **Server-Sent Events (SSE)**: Stream real-time status updates to all connected browser sessions without requiring manual refresh.
 3. **Pagination & Search**: Add page-based pagination (`limit` & `offset`) and search query filtering for when the job queue grows beyond thousands of records.
 4. **Execution Duration Metrics**: Track `startedAt` and `completedAt` to show average runtime and throughput per job type.
+

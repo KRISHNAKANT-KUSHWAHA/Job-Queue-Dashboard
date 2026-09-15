@@ -10,11 +10,11 @@ function JobForm({ onJobCreated }) {
     e.preventDefault();
 
     if (!title.trim()) {
-      setFormError('Job title is required');
+      setFormError('Please enter a job title');
       return;
     }
     if (!type.trim()) {
-      setFormError('Job type is required');
+      setFormError('Please select a job type');
       return;
     }
 
@@ -26,7 +26,7 @@ function JobForm({ onJobCreated }) {
       setTitle('');
       setType('email');
     } catch (err) {
-      setFormError('Failed to create job');
+      setFormError('Failed to create job. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -44,10 +44,11 @@ function JobForm({ onJobCreated }) {
           <input
             id="job-title"
             type="text"
-            placeholder="e.g. Send Welcome Email, Generate Invoice"
+            placeholder="e.g. Process Monthly Payroll, Send Onboarding Email..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={isSubmitting}
+            autoComplete="off"
           />
         </div>
 
@@ -59,11 +60,12 @@ function JobForm({ onJobCreated }) {
             onChange={(e) => setType(e.target.value)}
             disabled={isSubmitting}
           >
-            <option value="email">Email</option>
-            <option value="report">Report Generation</option>
-            <option value="backup">Database Backup</option>
-            <option value="export">Data Export</option>
-            <option value="cleanup">Cache Cleanup</option>
+            <option value="email">✉️ Email Delivery</option>
+            <option value="report">📊 Report Generation</option>
+            <option value="backup">💾 Database Backup</option>
+            <option value="export">📁 Data Export</option>
+            <option value="media">🎬 Media Processing</option>
+            <option value="cleanup">🧹 System Maintenance</option>
           </select>
         </div>
 
@@ -73,7 +75,7 @@ function JobForm({ onJobCreated }) {
           className="btn btn-primary"
           disabled={isSubmitting || !title.trim()}
         >
-          {isSubmitting ? 'Creating...' : 'Create Job'}
+          {isSubmitting ? 'Creating...' : '+ Create Job'}
         </button>
       </div>
     </form>
